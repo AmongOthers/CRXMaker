@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Windows7.Multitouch.WinForms</name>
+    </assembly>
+    <members>
+        <member name="T:Windows7.Multitouch.WinForms.ControlWrapper">
+            <summary>
+            Represents a WinForms Control
+            </summary>
+        </member>
+        <member name="T:Windows7.Multitouch.WinForms.GUITimer">
+            <summary>
+            The WinForm GUI Timer for Inerta Events
+            </summary>
+        </member>
+        <member name="M:Windows7.Multitouch.WinForms.GUITimer.Windows7#Multitouch#IGUITimer#Start">
+            <summary>
+            The WinForm GUI Timer for Inerta Events
+            </summary>
+        </member>
+        <member name="M:Windows7.Multitouch.WinForms.GUITimer.Windows7#Multitouch#IGUITimer#Stop">
+            <summary>
+            The WinForm GUI Timer for Inerta Events
+            </summary>
+        </member>
+        <member name="M:Windows7.Multitouch.WinForms.GUITimer.Windows7#Multitouch#IGUITimer#get_Interval">
+            <summary>
+            The WinForm GUI Timer for Inerta Events
+            </summary>
+        </member>
+        <member name="M:Windows7.Multitouch.WinForms.GUITimer.Windows7#Multitouch#IGUITimer#set_Interval(System.Int32)">
+            <summary>
+            The WinForm GUI Timer for Inerta Events
+            </summary>
+        </member>
+        <member name="M:Windows7.Multitouch.WinForms.GUITimer.Windows7#Multitouch#IGUITimer#add_Tick(System.EventHandler)">
+            <summary>
+            The WinForm GUI Timer for Inerta Events
+            </summary>
+        </member>
+        <member name="M:Windows7.Multitouch.WinForms.GUITimer.Windows7#Multitouch#IGUITimer#remove_Tick(System.EventHandler)">
+            <summary>
+            The WinForm GUI Timer for Inerta Events
+            </summary>
+        </member>
+        <member name="T:Windows7.Multitouch.WinForms.Factory">
+            <summary>
+            A factory that creates touch or gesture handler for a Windows Forms controls
+            </summary>
+        </member>
+        <member name="M:Windows7.Multitouch.WinForms.Factory.CreateHandler``1(System.Windows.Forms.Control)">
+            <summary>
+            A factory that creates touch or gesture handler for a Windows Forms controls
+            </summary>
+            <remarks>We use factory to ensure that only one handler will be created for a control, since Gesture and Touch are mutually exclude</remarks>
+            <typeparam name="T">The handler type</typeparam>
+            <param name="control">The control that need touch or gesture events</param>
+            <returns>TouchHandler or Gesture Handler</returns>
+        </member>
+        <member name="M:Windows7.Multitouch.WinForms.Factory.CreateTimer">
+            <summary>
+            Create a wrapper for a UI based timer 
+            </summary>
+            <remarks>This timer is called in the context of the UI thread</remarks>
+            <returns>A timer Wrapper</returns>
+        </member>
+    </members>
+</doc>

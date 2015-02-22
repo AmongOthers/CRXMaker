@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{730AF5F5-5009-4E86-B607-A27F501CBEAC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tools</RootNamespace>
+    <AssemblyName>Tools</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Tools.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Tools.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseX86|AnyCPU'">
+    <OutputPath>bin\ReleaseX86\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Tools.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseX86|x86'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Tools.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CE.iPhone.PList.sjmulder">
+      <HintPath>..\library\plist\CE.iPhone.PList.sjmulder.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\library\zip\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\library\DotNetZip\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="IOSCamMgr">
+      <HintPath>..\library\IOSCamMgr\IOSCamMgr.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\library\log4net-1.2.11\bin\net\4.0\release\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\library\json\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RaptorDB">
+      <HintPath>..\library\RaptorDB\RaptorDB.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\..\..\..\dynamicRes\library\sqlite\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AndroidDaemonConfig.cs" />
+    <Compile Include="AndroidDaemonConfig2.cs" />
+    <Compile Include="ApkInstallLocationMode.cs" />
+    <Compile Include="ApkUtil.cs" />
+    <Compile Include="AppInfoUtils\ApkOrIpaInfo.cs" />
+    <Compile Include="AppInfoUtils\AppInfoTool.cs" />
+    <Compile Include="AppInfoUtils\Common.cs" />
+    <Compile Include="ApplePidManager.cs" />
+    <Compile Include="AsyncTransaction\AsyncTransactionAtom.cs" />
+    <Compile Include="AsyncTransaction\AsyncTransactionAnd.cs" />
+    <Compile Include="AsyncTransaction\AsyncTransactionOr.cs" />
+    <Compile Include="AsyncTransaction\AsyncTransactionThen.cs" />
+    <Compile Include="CheckWinVersion.cs" />
+    <Compile Include="ClientTypeTool.cs" />
+    <Compile Include="CommandExecutorrEx.cs" />
+    <Compile Include="CommonDbFactory.cs" />
+    <Compile Include="CommonHelper.cs" />
+    <Compile Include="DbHelper.cs" />
+    <Compile Include="DeleteCache.cs" />
+    <Compile Include="DetectIphoneComponent.cs" />
+    <Compile Include="DirScanner.cs" />
+    <Compile Include="DownloadTask.cs" />
+    <Compile Include="DriveCleanup.cs" />
+    <Compile Include="DriverPolicy.cs" />
+    <Compile Include="EncodingConvert.cs" />
+    <Compile Include="EpochHelper.cs" />
+    <Compile Include="ExceptionErrno.cs" />
+    <Compile Include="ExceptionSetup.cs" />
+    <Compile Include="Executor.cs" />
+    <Compile Include="ExecutorContorl.cs" />
+    <Compile Include="FileSerialDictionary.cs" />
+    <Compile Include="FtpTool.cs" />
+    <Compile Include="HttpRequestTool.cs" />
+    <Compile Include="HttpToolWithSession.cs" />
+    <Compile Include="AsyncTransaction\AsyncTransaction.cs" />
+    <Compile Include="ICommonDb.cs" />
+    <Compile Include="IEProxyOptions.cs" />
+    <Compile Include="IHttpTool.cs" />
+    <Compile Include="IniFileDb.cs" />
+    <Compile Include="INIFile.cs" />
+    <Compile Include="IPCUtil.cs" />
+    <Compile Include="IphoneSupport.cs" />
+    <Compile Include="IPTool.cs" />
+    <Compile Include="ItunesDetector.cs" />
+    <Compile Include="JsonMessage.cs" />
+    <Compile Include="KeyValueDbUtils\KeyValueDbManager.cs" />
+    <Compile Include="LivingShell.cs" />
+    <Compile Include="LxErrno.cs" />
+    <Compile Include="LxJob.cs" />
+    <Compile Include="LxJudge.cs" />
+    <Compile Include="LxPredicate.cs" />
+    <Compile Include="LxProducer.cs" />
+    <Compile Include="LxRetryMachine.cs" />
+    <Compile Include="MailUtils.cs" />
+    <Compile Include="MD5Helper.cs" />
+    <Compile Include="MonitorInfo.cs" />
+    <Compile Include="Netport.cs" />
+    <Compile Include="NewTask.cs" />
+    <Compile Include="NodeServer.cs" />
+    <Compile Include="ObjectSerializer.cs" />
+    <Compile Include="ObjectXmlSerializer.cs" />
+    <Compile Include="PathInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropramGuid.cs" />
+    <Compile Include="RaptorDb.cs" />
+    <Compile Include="ReaderWriterObjectLocker.cs" />
+    <Compile Include="RegeditProcess.cs" />
+    <Compile Include="RegistryHelper.cs" />
+    <Compile Include="ReportSetting.cs" />
+    <Compile Include="RequestHelper.cs" />
+    <Compile Include="ResouceCleaner.cs" />
+    <Compile Include="ResourceFileHelper.cs" />
+    <Compile Include="RootPath.cs" />
+    <Compile Include="CommandErrno.cs" />
+    <Compile Include="CommandExcutor.cs" />
+    <Compile Include="CommandHelper.cs" />
+    <Compile Include="SilentInfo.cs" />
+    <Compile Include="SingletonChecker.cs" />
+    <Compile Include="SQLiteDBHelper.cs" />
+    <Compile Include="SqliteDb.cs" />
+    <Compile Include="SymmetricMethod.cs" />
+    <Compile Include="SystemUtils.cs" />
+    <Compile Include="TabletTip.cs" />
+    <Compile Include="TaskArgs.cs" />
+    <Compile Include="Taskkill.cs" />
+    <Compile Include="Timestamp.cs" />
+    <Compile Include="ToolLongChinesePathTest.cs" />
+    <Compile Include="Tuple.cs" />
+    <Compile Include="UploadLog.cs" />
+    <Compile Include="UploadLogManager.cs" />
+    <Compile Include="UserBehaviorManager.cs" />
+    <Compile Include="VersionComparer.cs" />
+    <Compile Include="Website.cs" />
+    <Compile Include="Zip.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AppInfoUtils\AppPermissions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AppInfoUtils\AndriodVersions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{f3d3c1f8-8f51-4150-ac6a-867efa86850e}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
