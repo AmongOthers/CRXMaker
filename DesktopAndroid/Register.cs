@@ -18,7 +18,13 @@ namespace DesktopAndroid
 
         const string URI = "http://localhost:4639/api/app";
 
-        public bool IsPro { get; set; }
+        public bool IsPro
+        {
+            get
+            {
+                return this.RegisterValue != null && !String.IsNullOrEmpty(this.RegisterValue.KeyCode);
+            }
+        }
         public RegisterValue RegisterValue { get; set; }
 
         ValidateForm validateForm;
@@ -104,10 +110,19 @@ namespace DesktopAndroid
                 try
                 {
                     connectServer(keycode);
-                    registerForm.Invoke(new MethodInvoker(() =>
+                    if (!String.IsNullOrEmpty(this.RegisterValue.KeyCode))
                     {
-                        registerForm.Close();
-                    }));
+                        registerForm.Invoke(new MethodInvoker(() => {
+                            registerForm.Close();
+                        }));
+                    }
+                    else
+                    {
+                        registerForm.Invoke(new MethodInvoker(() =>
+                        {
+                            registerForm.MyShow(this.RegisterValue.Message);
+                        }));
+                    }
                 }
                 catch(Exception ex)
                 {

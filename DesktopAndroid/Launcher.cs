@@ -271,10 +271,6 @@ namespace DesktopAndroid
             });
         }
 
-        public void downloadApp(string id)
-        {
-            Console.WriteLine("downloadApp");
-        }
 
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
@@ -301,6 +297,11 @@ namespace DesktopAndroid
         private void upgrade_Click(object sender, EventArgs e)
         {
             this.register.RegisterNow();
+            if (this.register.IsPro)
+            {
+                showMessage("已升级为正式版");
+                this.upgradeLabel.Visible = false;
+            }
         }
 
         private void Launcher_Load(object sender, EventArgs e)
