@@ -86,6 +86,7 @@
             // pictureBox1
             // 
             this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox1.Location = new System.Drawing.Point(500, 7);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(32, 32);
@@ -93,7 +94,7 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
-            // label1
+            // upgradeLabel
             // 
             this.upgradeLabel.AutoSize = true;
             this.upgradeLabel.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -101,12 +102,12 @@
                 | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.upgradeLabel.ForeColor = System.Drawing.SystemColors.Highlight;
             this.upgradeLabel.Location = new System.Drawing.Point(12, 9);
-            this.upgradeLabel.Name = "label1";
+            this.upgradeLabel.Name = "upgradeLabel";
             this.upgradeLabel.Size = new System.Drawing.Size(129, 19);
             this.upgradeLabel.TabIndex = 4;
             this.upgradeLabel.Text = "升级到正式版";
             this.upgradeLabel.Visible = false;
-            this.upgradeLabel.Click += new System.EventHandler(this.label1_Click);
+            this.upgradeLabel.Click += new System.EventHandler(this.upgrade_Click);
             // 
             // Launcher
             // 

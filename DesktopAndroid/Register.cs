@@ -4,6 +4,7 @@ using System.IO;
 using System.Management;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -20,53 +21,158 @@ namespace DesktopAndroid
         public bool IsPro { get; set; }
         public RegisterValue RegisterValue { get; set; }
 
+        ValidateForm validateForm;
+        RegisterForm registerForm;
+        bool isValidateFormShown;
+
+        public Register()
+        {
+            validateForm = new ValidateForm();
+            validateForm.RetryClick += validateForm_RetryClick;
+            registerForm = new RegisterForm();
+            registerForm.RetryClick += registerForm_RetryClick;
+        }
+
+        void registerForm_RetryClick()
+        {
+            doRegister();
+        }
+
+
         public void Init()
         {
             var path = Path.Combine(Directory.GetParent(Application.LocalUserAppDataPath).FullName, "keystore");
-            if(validate(path))
+            if(validateLocal(path))
             {
             }
             else
             {
-                var form = new ValidateForm();
-                ThreadPool.QueueUserWorkItem((o) =>
+                doInit();
+            }
+        }
+
+
+        public void RegisterNow()
+        {
+            registerForm.MyShow("");
+            registerForm.ShowDialog();
+        }
+
+        private bool validateLocal(string path)
+        {
+            return false;
+        }
+
+        private void doInit()
+        {
+            validateForm.MyShow("正在和服务器通信...", false);
+            ThreadPool.QueueUserWorkItem((o) =>
+            {
+                try
                 {
-                    var req = HttpWebRequest.Create(URI);
-                    req.Method = "POST";
-                    req.ContentType = "text/json";
-                    var registerInfo = new RegisterInfo {
-                        MachineId = GetMachineId(),
-                        KeyCode = "hello?",
-                        Random = Guid.NewGuid().ToString()
-                    };
-                    var content = Newtonsoft.Json.JsonConvert.SerializeObject(registerInfo);
-                    content = this.enciphermentUtil.encStringPlusBase64(content);
-                    var body = new Message { Content = content };
-                    var bodyContent = Newtonsoft.Json.JsonConvert.SerializeObject(body);
-                    var data = Encoding.UTF8.GetBytes(bodyContent);
-                    using(var stream = req.GetRequestStream()) {
-                        stream.Write(data, 0, data.Length);
-                    }
-                    var rsp = req.GetResponse() as HttpWebResponse;
-                    using(var stream = rsp.GetResponseStream()) {
-                        using(var reader = new StreamReader(stream)) {
-                            var rspContent = reader.ReadToEnd();
-                            var message = Newtonsoft.Json.JsonConvert.DeserializeObject<Message>(rspContent);
-                            var messageContent = this.enciphermentUtil.decStringPlusBase64(message.Content);
-                            this.RegisterValue = Newtonsoft.Json.JsonConvert.DeserializeObject<RegisterValue>(messageContent);
-                        }
-                    }
-                    //和服务器通信的时候这个值应该一致
-                    if (this.RegisterValue.Random != registerInfo.Random)
+                    connectServer();
+                    validateForm.Invoke(new MethodInvoker(() =>
                     {
-                        this.RegisterValue.IsLimited = true;
-                    }
-                    form.Invoke(new MethodInvoker(() =>
-                    {
-                        form.Close();
+                        validateForm.Close();
                     }));
-                });
-                form.ShowDialog();
+                }
+                catch (Exception e)
+                {
+                    validateForm.Invoke(new MethodInvoker(() =>
+                    {
+                        validateForm.MyShow("通信错误", true);
+                    }));
+                }
+            });
+            if (!isValidateFormShown)
+            {
+                isValidateFormShown = true;
+                validateForm.ShowDialog();
+            }
+        }
+
+        private void doRegister()
+        {
+            var keycode = this.registerForm.KeyCode;
+            if (!validateKeycode(keycode))
+            {
+                this.registerForm.MyShow("请输入有效的注册码");
+            }
+            this.registerForm.MyShow("正在注册...");
+            ThreadPool.QueueUserWorkItem((o) =>
+            {
+                try
+                {
+                    connectServer(keycode);
+                    registerForm.Invoke(new MethodInvoker(() =>
+                    {
+                        registerForm.Close();
+                    }));
+                }
+                catch(Exception ex)
+                {
+                    registerForm.Invoke(new MethodInvoker(() =>
+                    {
+                        registerForm.MyShow("通信错误，请重试");
+                    }));
+                }
+            });
+        }
+
+        private bool validateKeycode(string keycode)
+        {
+            if (keycode.Length == 8)
+            {
+                Regex regex = new Regex("[0-9a-z]{8}");
+                if(regex.IsMatch(keycode))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        void validateForm_RetryClick()
+        {
+            doInit();
+        }
+
+        private void connectServer(string keycode = "")
+        {
+            var req = HttpWebRequest.Create(URI);
+            req.Method = "POST";
+            req.ContentType = "text/json";
+            var registerInfo = new RegisterInfo
+            {
+                MachineId = GetMachineId(),
+                KeyCode = keycode,
+                Random = Guid.NewGuid().ToString()
+            };
+            req.Timeout = 30 * 1000;
+            var content = Newtonsoft.Json.JsonConvert.SerializeObject(registerInfo);
+            content = this.enciphermentUtil.encStringPlusBase64(content);
+            var body = new Message { Content = content };
+            var bodyContent = Newtonsoft.Json.JsonConvert.SerializeObject(body);
+            var data = Encoding.UTF8.GetBytes(bodyContent);
+            using (var stream = req.GetRequestStream())
+            {
+                stream.Write(data, 0, data.Length);
+            }
+            var rsp = req.GetResponse() as HttpWebResponse;
+            using (var stream = rsp.GetResponseStream())
+            {
+                using (var reader = new StreamReader(stream))
+                {
+                    var rspContent = reader.ReadToEnd();
+                    var message = Newtonsoft.Json.JsonConvert.DeserializeObject<Message>(rspContent);
+                    var messageContent = this.enciphermentUtil.decStringPlusBase64(message.Content);
+                    this.RegisterValue = Newtonsoft.Json.JsonConvert.DeserializeObject<RegisterValue>(messageContent);
+                }
+            }
+            //和服务器通信的时候这个值应该一致
+            if (this.RegisterValue.Random != registerInfo.Random)
+            {
+                this.RegisterValue.IsLimited = true;
             }
         }
 

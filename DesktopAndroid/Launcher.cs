@@ -298,9 +298,9 @@ namespace DesktopAndroid
             this.Close();
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void upgrade_Click(object sender, EventArgs e)
         {
-
+            this.register.RegisterNow();
         }
 
         private void Launcher_Load(object sender, EventArgs e)
