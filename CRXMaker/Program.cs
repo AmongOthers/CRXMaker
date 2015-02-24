@@ -45,10 +45,15 @@ namespace CRXMaker
             //替换图标
             tool.Apk.ExtractApkIcon(apkPath, info.AppIcon, info.PackageName + ".android", "icon");
             var outputzipFileName = String.Format("{0}v{1}.zip", info.AppName.Replace(":", "-"), info.AppVersion);
-            string zipArgs = String.Format(@"a {0} {1}", outputzipFileName, info.PackageName + ".android");
+            string zipArgs = String.Format("a \"{0}\" \"{1}\"", outputzipFileName, info.PackageName + ".android");
             Console.WriteLine(String.Format("zipArgs: {0}", zipArgs));
             errno = CommandHelper.excute(@"C:\Program Files\WinRAR\WinRAR.exe", zipArgs, -1, out executorControl, Encoding.UTF8);
-            File.Move(outputzipFileName, outputzipFileName.Replace("zip", "dacrx"));
+            var dstFileName = outputzipFileName.Replace("zip", "dacrx");
+            if (File.Exists(dstFileName))
+            {
+                File.Delete(dstFileName);
+            }
+            File.Move(outputzipFileName, dstFileName);
         }
     }
 }

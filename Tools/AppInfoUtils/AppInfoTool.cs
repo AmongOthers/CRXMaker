@@ -1,5 +1,4 @@
-﻿using CE.iPhone.PList;
-using ICSharpCode.SharpZipLib.Zip;
+﻿using ICSharpCode.SharpZipLib.Zip;
 using log4net.Repository.Hierarchy;
 using System;
 using System.Collections.Generic;

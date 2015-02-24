@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading;
@@ -24,6 +25,7 @@ namespace DesktopAndroid
         SQLiteDBHelper sqlHelper;
         ReaderWriterObjectLocker dbLocker;
         string messageHtml;
+        Register register;
 
         public Launcher()
         {
@@ -40,12 +42,14 @@ namespace DesktopAndroid
             this.listView.View = View.LargeIcon;
             this.listView.MultiSelect = false;
             this.imageList = new ImageList();
-            this.imageList.ImageSize = new Size(55, 55);
+            this.imageList.ImageSize = new Size(44, 44);
             Image installingImage = Image.FromFile("installing.png");
             this.imageList.Images.Add(INSTALLING_IMAGE_KEY, installingImage);
             Image downloadImage = Image.FromFile("download.png");
             this.imageList.Images.Add(DOWNLOAD_IMAGE_KEY, downloadImage);
             this.listView.LargeImageList = this.imageList;
+            //设置这个避免ListView图像模糊(blur)
+            this.listView.LargeImageList.ColorDepth = ColorDepth.Depth32Bit;
 
             var downloadItem = this.listView.Items.Add("下载更多");
             downloadItem.Tag = "download";
@@ -79,11 +83,12 @@ namespace DesktopAndroid
             foreach (var app in this.appList)
             {
                 //使用Image.FromFile和using，导致System.Drawing的Exception，不知道为什么
-                using(Stream s = File.Open(app.IconPath, FileMode.Open))
+                using (Stream s = File.Open(app.IconPath, FileMode.Open))
                 {
                     Image icon = Image.FromStream(s);
                     this.imageList.Images.Add(app.AppName, icon);
                 }
+
                 ListViewItem lvi = this.listView.Items.Add(app.AppName);
                 lvi.Tag = app;
                 lvi.ImageKey = app.AppName;
@@ -99,6 +104,19 @@ namespace DesktopAndroid
         private void listView_MouseClick(object sender, MouseEventArgs e)
         {
             ListViewItem item = this.listView.SelectedItems[0];
+            if (e.Button == MouseButtons.Right)
+            {
+                this.contextMenuStrip1.Show(this.listView, new Point(e.X, e.Y));
+            }
+        }
+        private void listView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (this.register.RegisterValue.IsLimited)
+            {
+                showMessage("试用已结束，请升级到正式版");
+                return;
+            }
+            ListViewItem item = this.listView.SelectedItems[0];
             if (e.Button == MouseButtons.Left)
             {
                 if (item.Tag is AppInfo)
@@ -113,9 +131,6 @@ namespace DesktopAndroid
                     Market market = new Market(this);
                     market.Show();
                 }
-            } else if(e.Button == MouseButtons.Right)
-            {
-                this.contextMenuStrip1.Show(this.listView, new Point(e.X, e.Y));
             }
         }
 
@@ -146,22 +161,17 @@ namespace DesktopAndroid
         {
             object data = e.Data.GetData(DataFormats.FileDrop);
             string path = ((string[])data)[0];
+            if (!path.EndsWith(".dacrx"))
+            {
+                return;
+            }
             string appName = Path.GetFileNameWithoutExtension(path);
             foreach (var app in this.appList)
             {
                 if (app.AppName.Equals(appName))
                 {
-                    var message = this.messageHtml.Replace("{0}", String.Format("已安装 {0}", appName));
-                    this.webBrowser.DocumentText = message;
-                    this.webBrowser.Visible = true;
-                    ThreadPool.QueueUserWorkItem((o) =>
-                    {
-                        Thread.Sleep(2000);
-                        this.Invoke(new MethodInvoker(() =>
-                        {
-                            this.webBrowser.Visible = false;
-                        }));
-                    });
+                    var message = String.Format("已安装 {0}", appName);
+                    showMessage(message);
                     return;
                 }
             }
@@ -171,14 +181,32 @@ namespace DesktopAndroid
             installAsync(installingItem, path);
         }
 
+        private void showMessage(string content)
+        {
+            var message = this.messageHtml.Replace("{0}", content);
+            this.webBrowser.DocumentText = message;
+            this.webBrowser.Visible = true;
+            ThreadPool.QueueUserWorkItem((o) =>
+            {
+                Thread.Sleep(2000);
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    this.webBrowser.Visible = false;
+                }));
+            });
+        }
+
         private void uninstallAsync(ListViewItem item)
         {
             var appInfo = (AppInfo)(item.Tag);
             ThreadPool.QueueUserWorkItem((o) =>
             {
                 Directory.Delete(appInfo.RelativePath, true);
-                var sql = String.Format("delete from app where appname == \"{0}\"", appInfo.AppName);
-                this.sqlHelper.ExecuteNonQuery(sql);
+                using (this.dbLocker.WriteLock())
+                {
+                    var sql = String.Format("delete from app where appname == \"{0}\"", appInfo.AppName);
+                    this.sqlHelper.ExecuteNonQuery(sql);
+                }
                 this.appList.Remove(appInfo);
             });
         }
@@ -195,6 +223,25 @@ namespace DesktopAndroid
                 Zip.unzipAsDir(dstPath, relativePath);
                 File.Delete(dstPath);
                 var packageName = Path.GetFileName(Directory.GetDirectories(relativePath)[0]);
+                bool isDuplicat = false;
+                foreach (var app in this.appList)
+                {
+                    if (app.PackageName.Equals(packageName))
+                    {
+                        isDuplicat = true;
+                        break;
+                    }
+                }
+                if (isDuplicat)
+                {
+                    Directory.Delete(relativePath, true);
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        this.listView.Items.Remove(item);
+                        showMessage("正式版才支持安装同一应用的不同版本");
+                    }));
+                    return;
+                }
                 var iconPath = String.Format("{0}/{1}/icon.png", relativePath, packageName);
 
                 var appInfo = new AppInfo {
@@ -204,9 +251,12 @@ namespace DesktopAndroid
                     IconPath = iconPath 
                 };
                 this.appList.Add(appInfo);
-                var sql = String.Format("insert into app(appname,packagename,relativepath,iconpath) values(\"{0}\",\"{1}\",\"{2}\",\"{3}\")", 
-                    appName, packageName, relativePath, iconPath);
-                this.sqlHelper.ExecuteNonQuery(sql);
+                using (this.dbLocker.WriteLock())
+                {
+                    var sql = String.Format("insert into app(appname,packagename,relativepath,iconpath) values(\"{0}\",\"{1}\",\"{2}\",\"{3}\")", 
+                        appName, packageName, relativePath, iconPath);
+                    this.sqlHelper.ExecuteNonQuery(sql);
+                }
                 this.Invoke(new MethodInvoker(() =>
                 {
                     using (Stream s = File.Open(iconPath, FileMode.Open))
@@ -225,5 +275,51 @@ namespace DesktopAndroid
         {
             Console.WriteLine("downloadApp");
         }
+
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
+
+        private void Form1_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+            }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Launcher_Load(object sender, EventArgs e)
+        {
+        }
+
+        private void Launcher_Shown(object sender, EventArgs e)
+        {
+            register = new Register();
+            register.Init();
+            if (!register.IsPro)
+            {
+                if (!String.IsNullOrEmpty(register.RegisterValue.Message))
+                {
+                    showMessage(register.RegisterValue.Message);
+                }
+                this.upgradeLabel.Visible = true;
+            }
+        }
+
     }
 }
