@@ -45,12 +45,13 @@
             this.listView.AllowDrop = true;
             this.listView.BackColor = System.Drawing.SystemColors.InfoText;
             this.listView.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("listView.BackgroundImage")));
+            this.listView.BackgroundImageTiled = true;
             this.listView.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.listView.ForeColor = System.Drawing.SystemColors.Control;
             this.listView.Location = new System.Drawing.Point(0, 45);
             this.listView.Margin = new System.Windows.Forms.Padding(0);
             this.listView.Name = "listView";
-            this.listView.Size = new System.Drawing.Size(544, 555);
+            this.listView.Size = new System.Drawing.Size(544, 514);
             this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.SelectedIndexChanged += new System.EventHandler(this.listView_SelectedIndexChanged);
@@ -113,7 +114,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(544, 600);
+            this.ClientSize = new System.Drawing.Size(544, 559);
             this.Controls.Add(this.upgradeLabel);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.webBrowser);

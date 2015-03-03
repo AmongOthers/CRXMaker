@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Management;
 using System.Net;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+
 
 namespace DesktopAndroid
 {
@@ -16,7 +18,8 @@ namespace DesktopAndroid
         static byte[] iv = { 43, 134, 22, 227, 186, 10, 193, 127 };
         EnciphermentUtils enciphermentUtil = new EnciphermentUtils(key, iv);
 
-        const string URI = "http://localhost:4639/api/app";
+        //const string URI = "http://localhost:4639/api/app";
+        string URI = String.Format("{0}/api/app", ConfigurationManager.AppSettings["server"]);
 
         public bool IsPro
         {
@@ -47,14 +50,17 @@ namespace DesktopAndroid
 
         public void Init()
         {
-            var path = Path.Combine(Directory.GetParent(Application.LocalUserAppDataPath).FullName, "keystore");
-            if(validateLocal(path))
-            {
-            }
-            else
+            var path = getKeyStorePath();
+            if(!validateLocal(path))
             {
                 doInit();
             }
+        }
+
+        private static string getKeyStorePath()
+        {
+            var path = Path.Combine(Directory.GetParent(Application.LocalUserAppDataPath).FullName, "keystore");
+            return path;
         }
 
 
@@ -66,7 +72,25 @@ namespace DesktopAndroid
 
         private bool validateLocal(string path)
         {
-            return false;
+            try
+            {
+                using (var reader = new StreamReader(path))
+                {
+                    var content = reader.ReadToEnd();
+                    content = this.enciphermentUtil.decStringPlusBase64(content);
+                    var registerValue = Newtonsoft.Json.JsonConvert.DeserializeObject<RegisterValue>(content);
+                    if (registerValue.MachineId == this.GetMachineId() && !String.IsNullOrEmpty(registerValue.KeyCode))
+                    {
+                        this.RegisterValue = registerValue;
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private void doInit()
@@ -112,6 +136,14 @@ namespace DesktopAndroid
                     connectServer(keycode);
                     if (!String.IsNullOrEmpty(this.RegisterValue.KeyCode))
                     {
+                        var content = Newtonsoft.Json.JsonConvert.SerializeObject(this.RegisterValue);
+                        content = this.enciphermentUtil.encStringPlusBase64(content);
+                        var path = getKeyStorePath();
+                        using (var writer = new StreamWriter(path))
+                        {
+                            writer.Write(content);
+                        }
+
                         registerForm.Invoke(new MethodInvoker(() => {
                             registerForm.Close();
                         }));

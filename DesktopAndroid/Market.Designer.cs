@@ -40,7 +40,6 @@
             this.webBrowser.Name = "webBrowser";
             this.webBrowser.Size = new System.Drawing.Size(1084, 562);
             this.webBrowser.TabIndex = 0;
-            this.webBrowser.Url = new System.Uri("http://localhost:4639/", System.UriKind.Absolute);
             // 
             // Market
             // 

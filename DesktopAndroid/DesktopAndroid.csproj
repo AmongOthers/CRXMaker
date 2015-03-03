@@ -112,6 +112,8 @@
     </Compile>
     <Compile Include="RegisterInfo.cs" />
     <Compile Include="RegisterValue.cs" />
+    <Compile Include="Upgrader.cs" />
+    <Compile Include="UpgradeResult.cs" />
     <Compile Include="ValidateForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -155,6 +157,10 @@
     <Content Include="desktop-android.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Downloader\HttpDownloader.csproj">
+      <Project>{f2a24cde-9e6e-4227-a847-c0ee03444fa0}</Project>
+      <Name>HttpDownloader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EnciphermentUtils\EnciphermentUtils.csproj">
       <Project>{ba41baf9-9eb8-4cbb-84c9-f37c0983bb61}</Project>
       <Name>EnciphermentUtils</Name>

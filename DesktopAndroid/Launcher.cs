@@ -26,6 +26,7 @@ namespace DesktopAndroid
         ReaderWriterObjectLocker dbLocker;
         string messageHtml;
         Register register;
+        Upgrader upgrader;
 
         public Launcher()
         {
@@ -82,12 +83,20 @@ namespace DesktopAndroid
             this.listView.BeginUpdate();
             foreach (var app in this.appList)
             {
-                //使用Image.FromFile和using，导致System.Drawing的Exception，不知道为什么
-                using (Stream s = File.Open(app.IconPath, FileMode.Open))
+                try
                 {
-                    Image icon = Image.FromStream(s);
-                    this.imageList.Images.Add(app.AppName, icon);
+                    //使用Image.FromFile和using，导致System.Drawing的Exception，不知道为什么
+                    using (Stream s = File.Open(app.IconPath, FileMode.Open))
+                    {
+                        Image icon = Image.FromStream(s);
+                        this.imageList.Images.Add(app.AppName, icon);
+                    }
                 }
+                catch (System.IO.IOException)
+                {
+                    continue;
+                }
+                
 
                 ListViewItem lvi = this.listView.Items.Add(app.AppName);
                 lvi.Tag = app;
@@ -306,6 +315,8 @@ namespace DesktopAndroid
 
         private void Launcher_Load(object sender, EventArgs e)
         {
+            upgrader = new Upgrader();
+            upgrader.Init();
         }
 
         private void Launcher_Shown(object sender, EventArgs e)
